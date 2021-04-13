@@ -29,7 +29,7 @@ class CampsiteInfo extends Component {
         </div>
       );
     }
-    return <></>
+    return <></>;
   }
   render() {
     if(this.props.campsite) {
