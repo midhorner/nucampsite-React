@@ -10,6 +10,7 @@ import { CAMPSITES } from '../shared/campsites';
 import { COMMENTS} from '../shared/comments';
 import { PARTNERS } from '../shared/partners';
 import { PROMOTIONS } from '../shared/promotions';
+import CampsiteInfo from './CampsiteInfoComponent';
 
 class Main extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class Main extends Component {
   render() {
 
     const HomePage = () => {
+      // arrow function binds the function
       return(
         <Home 
           campsite={this.state.campsites.filter(campsite => campsite.featured)[0]}
@@ -35,6 +37,18 @@ class Main extends Component {
       );
     }
 
+    const CampsiteWithId = ({match}) => {
+      // arrow function binds the function
+      // match is the object passed in as props from the Route component; it is now destructured and can be used in this function directly
+      return(
+      <CampsiteInfo 
+        campsite={this.state.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]} 
+        comments={this.state.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)}
+      />
+      // + converts numbers stored as strings back to a number; [0] grabs the object not the array
+      );
+    }
+
     return (
         <div>
             <Header />
@@ -42,6 +56,11 @@ class Main extends Component {
               <Route path='/home' component={HomePage} />
               <Route exact path='/directory' render={() => <Directory campsites={this.state.campsites} />} />
               {/* render method used in directory because state data is being passed - for a different way, see HomePage */}
+              <Route path='/directory/:campsiteId' component={CampsiteWithId} />
+              {/* the : in :campsiteId tells the router that what follows is a parameter which it takes and stores inside property campsiteId;
+              The route component stores an object named 'match' in its state; match has an object as a property named 'params';
+              campsiteId (or whatever follows the : ) gets stored as a property of the params object;
+              the match object gets passed as a prop to the specified component automatically (CampsiteWithId) */}
               <Route exact path='/contactus' component={Contact} />
               <Redirect to='/home' />
             </Switch>

@@ -37,12 +37,13 @@ function RenderComments({comments}) {
 }
 
 function CampsiteInfo(props) {
+  // props passed through CampsiteWithId component from MainComponent
   if(props.campsite) {
     return (
     <div className="container">
       <div className="row">
         <RenderCampsite campsite={props.campsite} />
-        <RenderComments comments={props.campsite.comments} />
+        <RenderComments comments={props.comments} />
         {/* campsite and comments are then passed to render function and used to display cards & comments */}
       </div>
     </div>
