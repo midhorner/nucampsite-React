@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardImg, CardText, CardBody, CardTitle} from 'reactstrap';
 
 function RenderCard({item}) {
-  // item passed through as a prop from home then destructured
+  // item passed through as a prop from home then destructured - destructuring makes it so we don't have to keep typing 'props.item'
   return(
     <Card>
       <CardImg src={item.image} alt={item.name} />

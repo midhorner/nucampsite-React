@@ -5,6 +5,7 @@ import Footer from './FooterComponent';
 import Home from './HomeComponent'
 import Contact from './ContactComponent';
 import CampsiteInfo from './CampsiteInfoComponent';
+import About from './AboutComponent';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { CAMPSITES } from '../shared/campsites';
 import { COMMENTS} from '../shared/comments';
@@ -26,10 +27,11 @@ class Main extends Component {
   render() {
 
     const HomePage = () => {
-      // arrow function binds the function
+      // arrow function binds the function-inherits 'this' of parent scope
       return(
         <Home 
           campsite={this.state.campsites.filter(campsite => campsite.featured)[0]}
+          // the featured campsite object [0]index is pulled from the new array (remember filter makes a new array)
           promotion={this.state.promotions.filter(promotion => promotion.featured)[0]}
           partner={this.state.partners.filter(partner => partner.featured)[0]}
           // state passed as props to separate components, then used to display info - see HomeComponent for details
@@ -54,13 +56,13 @@ class Main extends Component {
             <Header />
             <Switch>
               <Route path='/home' component={HomePage} />
+              {/* the 'component' attribute tells the route which component to render - used when the component you are routing to does not require state data */}
               <Route exact path='/directory' render={() => <Directory campsites={this.state.campsites} />} />
-              {/* render method used in directory because state data is being passed - for a different way, see HomePage */}
+              {/* 'render method' used in directory because state data is being passed - for a different way, see HomePage */}
               <Route path='/directory/:campsiteId' component={CampsiteWithId} />
-              {/* the : in :campsiteId tells the router that what follows is a parameter which it takes and stores inside property campsiteId;
-              The route component stores an object named 'match' in its state; match has an object as a property named 'params';
-              campsiteId (or whatever follows the : ) gets stored as a property of the params object;
-              the match object gets passed as a prop to the specified component automatically (CampsiteWithId) */}
+              {/* the : in :campsiteId tells the router that what follows is a parameter which it takes and stores inside the property campsiteId; The route component stores an object named 'match' in its state; match has an object as a property named 'params';
+              campsiteId (or whatever follows the : ) gets stored as a property of the params object; the match object gets passed as a prop to the specified component automatically (CampsiteWithId) */}
+              <Route exact path='/aboutus' render={() => <About partners={this.state.partners} />} />
               <Route exact path='/contactus' component={Contact} />
               <Redirect to='/home' />
             </Switch>

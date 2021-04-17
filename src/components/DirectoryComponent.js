@@ -7,6 +7,7 @@ function RenderDirectoryItem({campsite}) {
   return (
     <Card>
       <Link to={`/directory/${campsite.id}`}>
+        {/* dynamic link created with vanilla js 'template literal' - whichever card is clicked on, it will create a link with that cards id */}
         <CardImg width="100%" src={campsite.image} alt={campsite.name} />
         <CardImgOverlay>
           <CardTitle>{campsite.name}</CardTitle>
