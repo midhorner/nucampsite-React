@@ -18,11 +18,13 @@ function RenderPartner({partner}) {
   return <></>;
 }
 
-function About(props) {
+function About({partners}) {
 
-    const partners = props.partners.map(partner => {
+    const partnersList = partners.map(partner => {
         return (
-            <Media tag="li" key={partner.id}><RenderPartner partner={partner}/></Media>
+            <Media tag="li" key={partner.id}>
+              <RenderPartner partner={partner}/>
+            </Media>
         );
     });
 
@@ -80,7 +82,7 @@ function About(props) {
                 </div>
                 <div className="col mt-4">
                     <Media list>
-                        {partners}
+                        {partnersList}
                     </Media>
                 </div>
             </div>
