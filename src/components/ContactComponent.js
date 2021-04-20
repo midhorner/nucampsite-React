@@ -24,6 +24,7 @@ class Contact extends Component {
     }
 
     validate(firstName, lastName, phoneNum, email) {
+        // sets and returns error messages of the conditions in the designated fields are not met/met
 
         const errors = {
             firstName: '',
@@ -31,6 +32,7 @@ class Contact extends Component {
             phoneNum: '',
             email: ''
         };
+        // object that stores error messages
 
         if(this.state.touched.firstName) {
             if(firstName.length < 2) {
@@ -89,6 +91,7 @@ class Contact extends Component {
     render() {
 
         const errors = this.validate(this.state.firstName, this.state.lastName, this.state.phoneNum, this.state.email);
+        // runs validate and stores all error messages in a new object
 
         return (
             <div className="container">
@@ -139,6 +142,7 @@ class Contact extends Component {
                                         // onChange event triggers when a user inputs a value into the input field
                                     />
                                     <FormFeedback>{errors.firstName}</FormFeedback>
+                                    {/* if there are error messages, they are displayed here */}
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
