@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Nav, Navbar, NavbarBrand, NavbarToggler, Collapse, NavItem, Jumbotron } from 'reactstrap';
+import { Nav, Navbar, NavbarBrand, NavbarToggler, Collapse, NavItem, Jumbotron, Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Input, Label } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 
 class Header extends Component {
   constructor(props) {
     super(props);
      this.state = {
-       isNavOpen: false
+       isNavOpen: false,
+       isModalOpen: false
      };
   }
 
@@ -15,6 +16,19 @@ class Header extends Component {
     this.setState({
       isNavOpen: !this.state.isNavOpen
     });
+  }
+
+  toggleModal = () => {
+    this.setState({
+      isModalOpen: !this.state.isModalOpen
+    });
+  }
+
+  handleLogin = (event) => {
+    alert(`Username: ${this.username.value} Password: ${this.password.value} Remember: ${this.remember.checked}`);
+    // these properties are set in the innerRef attr
+    this.toggleModal();
+    event.preventDefault();
   }
 
   render() {
@@ -57,9 +71,37 @@ class Header extends Component {
                     </NavLink>
                   </NavItem>
                 </Nav>
+                <span className="navbar-text ml-auto">
+                  <Button outline onClick={this.toggleModal}>
+                    <i className="fa fa-sign-in fa-lg" /> Login
+                  </Button>
+                </span>
               </Collapse>
           </div>
         </Navbar>
+        <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
+          <ModalBody>
+            <Form onSubmit={this.handleLogin}>
+              <FormGroup>
+                <Label htmlFor="username">Username</Label>
+                <Input type="text" id="username" name="username" innerRef={input => this.username = input} />
+                {/* innerRef uses a callback function to store the value of the input field in the property => this.username then stores that property in the component's state*/}
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="password">Password</Label>
+                <Input type="password" id="password" name="password" innerRef={input => this.password = input} />
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Input type="checkbox" name="remember" innerRef={input => this.remember = input} />
+                  Remember Me
+                </Label>
+              </FormGroup>
+              <Button type="submit" value="submit" color="primary">Login</Button>
+            </Form>
+          </ModalBody>
+        </Modal>
       </>
     );
   }
