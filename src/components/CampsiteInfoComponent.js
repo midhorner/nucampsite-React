@@ -13,9 +13,12 @@ class CommentForm extends Component {
     super(props);
     this.state = {
       isModalOpen: false,
-      rating: '',
+      rating: 5,
       author: '',
-      text: ''
+      text: '',
+      touched: {
+        author: false
+      }
     }; 
   }
 
@@ -41,12 +44,12 @@ class CommentForm extends Component {
               <LocalForm onSubmit={values => this.handleSubmit(values)}>
                 <div className="form-group">
                   <Label htmlFor="rating">Rating</Label>
-                  <Control.select className="form-control" model=".rating" name="rating" id="rating">
+                  <Control.select className="form-control" model=".rating" name="rating" id="rating" defaultValue={this.state.rating}>
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
                     <option>4</option>
-                    <option>5</option>
+                    <option selected>5</option>
                   </Control.select>
                 </div>
                 <div className="form-group">
@@ -111,7 +114,7 @@ function RenderComments({comments}) {
             {/* displays date in human readable way */}
           </div>
         ))}
-        <CommentForm/>
+        <CommentForm />
       </div>
     );
   }
