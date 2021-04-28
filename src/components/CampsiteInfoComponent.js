@@ -93,7 +93,7 @@ function RenderCampsite({campsite}) {
   // campsite passed through as a prop from render then destructured
   return(
     <div className="col-md-5 m-1">
-      <FadeTransform in transformProps={{exitTransform: 'scale(0.5) translateY(-50%)'}}>
+      <FadeTransform in transformProps={{exitTransform: 'scale(0.2) translateY(0%)'}}>
         <Card>
           <CardImg top src={baseUrl + campsite.image} alt={campsite.name} />
           <CardBody>
