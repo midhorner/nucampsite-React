@@ -9,7 +9,7 @@ import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
-import { addComment, fetchCampsites } from '../redux/ActionCreators';
+import { addComment, fetchCampsites, fetchComments, fetchPromotions } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
   return{
@@ -23,13 +23,17 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
   addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text)),
   fetchCampsites: () => (fetchCampsites()),
-  resetFeedbackForm: () => (actions.reset('feedbackForm'))
+  resetFeedbackForm: () => (actions.reset('feedbackForm')),
+  fetchComments: () => (fetchComments()),
+  fetchPromotions: () => (fetchPromotions())
 };
 
 class Main extends Component {
 
   componentDidMount() {
     this.props.fetchCampsites();
+    this.props.fetchComments();
+    this.props.fetchPromotions();
   }
   
   render() {
@@ -42,7 +46,9 @@ class Main extends Component {
           // the featured campsite object [0]index is pulled from the new array (remember filter makes a new array)
           campsitesLoading={this.props.campsites.isLoading}
           campsitesErrMess={this.props.campsites.errMess}
-          promotion={this.props.promotions.filter(promotion => promotion.featured)[0]}
+          promotion={this.props.promotions.promotions.filter(promotion => promotion.featured)[0]}
+          promotionLoading={this.props.promotions.isLoading}
+          promotionErrMess={this.props.promotions.errMess}
           partner={this.props.partners.filter(partner => partner.featured)[0]}
           // state passed from reducer as props to separate components, then used to display info - see HomeComponent for details
         />
@@ -57,7 +63,8 @@ class Main extends Component {
         campsite={this.props.campsites.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]}
         isLoading={this.props.campsites.isLoading}
         errMess={this.props.campsites.errMess}
-        comments={this.props.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)}
+        comments={this.props.comments.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)}
+        commentsErrMess={this.props.comments.errMess}
         addComment={this.props.addComment}
       />
       // + converts numbers stored as strings back to a number; [0] grabs the object not the array

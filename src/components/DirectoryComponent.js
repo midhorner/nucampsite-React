@@ -2,6 +2,7 @@ import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardImg, CardImgOverlay, CardTitle } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 function RenderDirectoryItem({campsite}) {
   // campsite passed through as a prop from Directory then destructured
@@ -9,7 +10,7 @@ function RenderDirectoryItem({campsite}) {
     <Card>
       <Link to={`/directory/${campsite.id}`}>
         {/* dynamic link created with vanilla js 'template literal' - whichever card is clicked on, it will create a link with that cards id */}
-        <CardImg width="100%" src={campsite.image} alt={campsite.name} />
+        <CardImg width="100%" src={baseUrl + campsite.image} alt={campsite.name} />
         <CardImgOverlay>
           <CardTitle>{campsite.name}</CardTitle>
         </CardImgOverlay>
