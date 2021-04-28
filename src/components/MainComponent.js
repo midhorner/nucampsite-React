@@ -10,6 +10,7 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
 import { postComment, fetchCampsites, fetchComments, fetchPromotions } from '../redux/ActionCreators';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const mapStateToProps = state => {
   return{
@@ -72,22 +73,27 @@ class Main extends Component {
     }
 
     return (
-        <div>
+        <>
             <Header />
-            <Switch>
-              <Route path='/home' component={HomePage} />
-              {/* the 'component' attribute tells the route which component to render - used when the component you are routing to does not require state data */}
-              <Route exact path='/directory' render={() => <Directory campsites={this.props.campsites} />} />
-              {/* 'render method' used in directory because state data is being passed - for a different way, see HomePage */}
-              <Route path='/directory/:campsiteId' component={CampsiteWithId} />
-              {/* the : in :campsiteId tells the router that what follows is a parameter which it takes and stores inside the property campsiteId; The route component stores an object named 'match' in its state; match has an object as a property named 'params';
-              campsiteId (or whatever follows the : ) gets stored as a property of the params object; the match object gets passed as a prop to the specified component automatically (CampsiteWithId) */}
-              <Route exact path='/aboutus' render={() => <About partners={this.props.partners} />} />
-              <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
-              <Redirect to='/home' />
-            </Switch>
+              <TransitionGroup>
+                <CSSTransition key={this.props.location.key} classNames="page" timeout={300}>
+                  {/* key is provided by routes */}
+                  <Switch>
+                    <Route path='/home' component={HomePage} />
+                    {/* the 'component' attribute tells the route which component to render - used when the component you are routing to does not require state data */}
+                    <Route exact path='/directory' render={() => <Directory campsites={this.props.campsites} />} />
+                    {/* 'render method' used in directory because state data is being passed - for a different way, see HomePage */}
+                    <Route path='/directory/:campsiteId' component={CampsiteWithId} />
+                    {/* the : in :campsiteId tells the router that what follows is a parameter which it takes and stores inside the property campsiteId; The route component stores an object named 'match' in its state; match has an object as a property named 'params';
+                    campsiteId (or whatever follows the : ) gets stored as a property of the params object; the match object gets passed as a prop to the specified component automatically (CampsiteWithId) */}
+                    <Route exact path='/aboutus' render={() => <About partners={this.props.partners} />} />
+                    <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
+                    <Redirect to='/home' />
+                  </Switch>
+                </CSSTransition>
+              </TransitionGroup>
             <Footer />
-        </div>
+        </>
     );
   }
 }
