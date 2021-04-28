@@ -32,7 +32,7 @@ class CommentForm extends Component {
 
   handleSubmit = (values) => {
     this.toggleModal();
-    this.props.addComment(this.props.campsiteId, values.rating, values.author, values.text);
+    this.props.postComment(this.props.campsiteId, values.rating, values.author, values.text);
   }
 
   render() {
@@ -102,7 +102,7 @@ function RenderCampsite({campsite}) {
   );
 }
   
-function RenderComments({comments, addComment, campsiteId}) {
+function RenderComments({comments, postComment, campsiteId}) {
   // comments passed through as a prop from render then destructured
   if(comments) {
     return(
@@ -115,7 +115,7 @@ function RenderComments({comments, addComment, campsiteId}) {
             {/* displays date in human readable way */}
           </div>
         ))}
-        <CommentForm campsiteId={campsiteId} addComment={addComment} />
+        <CommentForm campsiteId={campsiteId} postComment={postComment} />
       </div>
     );
   }
@@ -159,7 +159,7 @@ function CampsiteInfo(props) {
         <RenderCampsite campsite={props.campsite} />
         <RenderComments 
           comments={props.comments} 
-          addComment={props.addComment}
+          postComment={props.postComment}
           campsiteId={props.campsite.id}
         />
         {/* campsite and comments are then passed to render function and used to display cards & comments */}
