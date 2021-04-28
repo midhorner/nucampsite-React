@@ -8,6 +8,7 @@ import CampsiteInfo from './CampsiteInfoComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { addComment, fetchCampsites } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
   return{
@@ -18,7 +19,16 @@ const mapStateToProps = state => {
   }
 }
 
+const mapDispatchToProps = {
+  addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text)),
+  fetchCampsites: () => (fetchCampsites())
+};
+
 class Main extends Component {
+
+  componentDidMount() {
+    this.props.fetchCampsites();
+  }
   
   render() {
 
@@ -26,8 +36,10 @@ class Main extends Component {
       // arrow function binds the function-inherits 'this' of parent scope
       return(
         <Home 
-          campsite={this.props.campsites.filter(campsite => campsite.featured)[0]}
+          campsite={this.props.campsites.campsites.filter(campsite => campsite.featured)[0]}
           // the featured campsite object [0]index is pulled from the new array (remember filter makes a new array)
+          campsitesLoading={this.props.campsites.isLoading}
+          campsitesErrMess={this.props.campsites.errMess}
           promotion={this.props.promotions.filter(promotion => promotion.featured)[0]}
           partner={this.props.partners.filter(partner => partner.featured)[0]}
           // state passed from reducer as props to separate components, then used to display info - see HomeComponent for details
@@ -40,8 +52,11 @@ class Main extends Component {
       // match is the object passed in as props from the Route component; it is now destructured and can be used in this function directly
       return(
       <CampsiteInfo 
-        campsite={this.props.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]} 
+        campsite={this.props.campsites.campsites.filter(campsite => campsite.id === +match.params.campsiteId)[0]}
+        isLoading={this.props.campsites.isLoading}
+        errMess={this.props.campsites.errMess}
         comments={this.props.comments.filter(comment => comment.campsiteId === +match.params.campsiteId)}
+        addComment={this.props.addComment}
       />
       // + converts numbers stored as strings back to a number; [0] grabs the object not the array
       );
@@ -68,4 +83,4 @@ class Main extends Component {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
