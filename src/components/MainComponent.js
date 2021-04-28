@@ -8,6 +8,7 @@ import CampsiteInfo from './CampsiteInfoComponent';
 import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { actions } from 'react-redux-form';
 import { addComment, fetchCampsites } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
@@ -21,7 +22,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   addComment: (campsiteId, rating, author, text) => (addComment(campsiteId, rating, author, text)),
-  fetchCampsites: () => (fetchCampsites())
+  fetchCampsites: () => (fetchCampsites()),
+  resetFeedbackForm: () => (actions.reset('feedbackForm'))
 };
 
 class Main extends Component {
@@ -74,7 +76,7 @@ class Main extends Component {
               {/* the : in :campsiteId tells the router that what follows is a parameter which it takes and stores inside the property campsiteId; The route component stores an object named 'match' in its state; match has an object as a property named 'params';
               campsiteId (or whatever follows the : ) gets stored as a property of the params object; the match object gets passed as a prop to the specified component automatically (CampsiteWithId) */}
               <Route exact path='/aboutus' render={() => <About partners={this.props.partners} />} />
-              <Route exact path='/contactus' component={Contact} />
+              <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
               <Redirect to='/home' />
             </Switch>
             <Footer />
