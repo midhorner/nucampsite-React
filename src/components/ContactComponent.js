@@ -33,10 +33,8 @@ class Contact extends Component {
     }
 
     handleSubmit = (values) => {
-        console.log(`The current state is: ${JSON.stringify(values)}`);
-        // JSON.stringify() converts an object or value to a json string
-        alert(`The current state is: ${JSON.stringify(values)}`);
         this.props.resetFeedbackForm();
+        this.props.postFeedback(values.firstName, values.lastName, values.phoneNum, values.email, values.agree, values.contactType, values.feedback);
     }    
 
     render() {

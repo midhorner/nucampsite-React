@@ -9,7 +9,7 @@ import About from './AboutComponent';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
-import { postComment, fetchCampsites, fetchComments, fetchPromotions } from '../redux/ActionCreators';
+import { postComment, fetchCampsites, fetchComments, fetchPromotions, fetchPartners, postFeedback } from '../redux/ActionCreators';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const mapStateToProps = state => {
@@ -20,13 +20,16 @@ const mapStateToProps = state => {
     promotions: state.promotions
   }
 }
+// mSTP() take the state from the store as an argument then returns the state as props.
 
 const mapDispatchToProps = {
   postComment: (campsiteId, rating, author, text) => (postComment(campsiteId, rating, author, text)),
+  postFeedback: (firstname, lastname, phoneNum, email, agree, contactType, feedback) => (postFeedback(firstname, lastname, phoneNum, email, agree, contactType, feedback)),
   fetchCampsites: () => (fetchCampsites()),
   resetFeedbackForm: () => (actions.reset('feedbackForm')),
   fetchComments: () => (fetchComments()),
-  fetchPromotions: () => (fetchPromotions())
+  fetchPromotions: () => (fetchPromotions()),
+  fetchPartners: () => (fetchPartners())
 };
 
 class Main extends Component {
@@ -35,6 +38,7 @@ class Main extends Component {
     this.props.fetchCampsites();
     this.props.fetchComments();
     this.props.fetchPromotions();
+    this.props.fetchPartners();
   }
   
   render() {
@@ -50,8 +54,10 @@ class Main extends Component {
           promotion={this.props.promotions.promotions.filter(promotion => promotion.featured)[0]}
           promotionLoading={this.props.promotions.isLoading}
           promotionErrMess={this.props.promotions.errMess}
-          partner={this.props.partners.filter(partner => partner.featured)[0]}
+          partner={this.props.partners.partners.filter(partner => partner.featured)[0]}
           // state passed from reducer as props to separate components, then used to display info - see HomeComponent for details
+          partnerLoading={this.props.partners.isLoading}
+          partnerErrMess={this.props.errMess}
         />
       );
     }
@@ -87,7 +93,7 @@ class Main extends Component {
                     {/* the : in :campsiteId tells the router that what follows is a parameter which it takes and stores inside the property campsiteId; The route component stores an object named 'match' in its state; match has an object as a property named 'params';
                     campsiteId (or whatever follows the : ) gets stored as a property of the params object; the match object gets passed as a prop to the specified component automatically (CampsiteWithId) */}
                     <Route exact path='/aboutus' render={() => <About partners={this.props.partners} />} />
-                    <Route exact path='/contactus' render={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
+                    <Route exact path='/contactus' render={() => <Contact postFeedback={this.props.postFeedback} resetFeedbackForm={this.props.resetFeedbackForm} />} />
                     <Redirect to='/home' />
                   </Switch>
                 </CSSTransition>
@@ -99,3 +105,4 @@ class Main extends Component {
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
+// withRouter allows react-router to work with redux; the connect function and passing in the mSTP() and mDTP() allows the export to work with redux
